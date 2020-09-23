@@ -80,13 +80,6 @@ export default {
     };
   },
 
-  watch: {
-    ['state.disabled'](disabled) {
-      // eslint-disable-next-line no-console
-      console.log({ disabled });
-    }
-  },
-
   mounted() {
     this.id = setInterval(() => {
       const { random } = this.state;

@@ -1,0 +1,57 @@
+{
+  "name": "@ayase/vc-align",
+  "version": "0.0.3",
+  "description": "align ui component for vue 3",
+  "author": "PeckZeg <peck.zeg@gmail.com>",
+  "private": true,
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "module": "./es/index.js",
+  "keywords": [
+    "vue",
+    "vue-component",
+    "vue-align",
+    "align"
+  ],
+  "files": [
+    "lib",
+    "es",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:PeckZeg/vc-align.git"
+  },
+  "scripts": {
+    "start": "ayase start",
+    "docs": "ayase docs",
+    "build": "ayase-build"
+  },
+  "dependencies": {
+    "@ayase/vc-util": "^0.0.2",
+    "@babel/runtime": "^7.11.2",
+    "dom-align": "^1.12.0",
+    "resize-observer-polyfill": "^1.5.1",
+    "vue-types": "^3.0.0"
+  },
+  "devDependencies": {
+    "@ayase/ayase": "^0.0.5",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.9.0",
+    "eslint-plugin-vue": "^7.0.0-beta.3",
+    "prettier": "^2.1.2",
+    "pretty-quick": "^3.0.2"
+  },
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  }
+}

@@ -133,10 +133,10 @@
     webpack-dev-server "^3.11.0"
     yargs-parser "^18.1.3"
 
-"@ayase/ayase@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.npmjs.org/@ayase/ayase/-/ayase-0.0.5.tgz#93640620a213edf5d29867db031be3619958e011"
-  integrity sha512-aGm/uVfknUuF65lXdibaLFINqOKYSOj8ot+VH14LkLlk+F+2GXErFQGsZDoo4HpwYm1CXeY4yQg1VNodp/gH1w==
+"@ayase/ayase@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.npmjs.org/@ayase/ayase/-/ayase-0.0.6.tgz#6203712aa6299f9335fec635567365053d69865c"
+  integrity sha512-EHnbzb5DZDQU12hWt7njh7LwEzZFFfe/5koKMlL46BXHa8ND2VzS+G0xOk5TldinwM+gSKDG49w/f+qQAWr/Xg==
   dependencies:
     "@ayase/ayase-build" "^0.0.1"
     "@babel/core" "7.10.5"

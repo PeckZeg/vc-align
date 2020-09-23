@@ -3,6 +3,7 @@ node_js:
   - 10
 
 install:
+  - yarn add -D vue
   - yarn install
 
 script:

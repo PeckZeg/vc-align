@@ -1,6 +1,6 @@
 {
   "name": "@ayase/vc-align",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "align ui component for vue 3",
   "author": "PeckZeg <peck.zeg@gmail.com>",
   "private": true,

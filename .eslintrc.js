@@ -9,6 +9,7 @@ module.exports = {
     ecmaVersion: 2017
   },
   env: {
+    'jest/globals': true,
     browser: true,
     node: true
   },
@@ -25,8 +26,7 @@ module.exports = {
     'eslint:recommended'
   ],
 
-  // required to lint *.vue files
-  plugins: ['vue'],
+  plugins: ['vue', 'jest'],
 
   globals: {
     process: true,

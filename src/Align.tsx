@@ -1,24 +1,24 @@
-import addEventListener from '@ayase/vc-util/lib/Dom/addEventListener';
-import { alignElement, alignPoint } from 'dom-align';
 import { AlignResult, AlignType, TargetPoint, TargetType } from './interface';
 import VueTypes from 'vue-types';
 import { Ref } from 'vue';
 
+import addEventListener from '@ayase/vc-util/lib/Dom/addEventListener';
+import { isSamePoint, monitorResize, restoreFocus } from './util';
+import { alignElement, alignPoint } from 'dom-align';
+import { composeRef } from '@ayase/vc-util/lib/ref';
+import { returnUndefined } from '@ayase/vc-util';
+import useBuffer from './hooks/useBuffer';
+
 import {
   defineComponent,
-  cloneVNode,
-  isVNode,
-  onMounted,
   onUnmounted,
   watchEffect,
+  cloneVNode,
+  isVNode,
   watch,
   toRef,
   ref
 } from 'vue';
-import { composeRef } from '@ayase/vc-util/lib/ref';
-import { returnUndefined } from '@ayase/vc-util';
-import useBuffer from './hooks/useBuffer';
-import { isSamePoint, monitorResize, restoreFocus } from './util';
 
 type OnAlign = (source: HTMLElement, result: AlignResult) => void;
 
@@ -92,10 +92,12 @@ export default defineComponent<AlignProps, AlignRawBindings>({
       }).loose
     ]).def(returnUndefined),
 
-    monitorBufferTime: VueTypes.number.def(returnUndefined as undefined),
+    monitorBufferTime: VueTypes.number.def(0),
     monitorWindowResize: VueTypes.bool.def(undefined),
     disabled: VueTypes.bool.def(undefined)
   } as undefined,
+
+  emits: ['align'],
 
   setup(props, ctx) {
     const onAlign = (source, result) => ctx.emit('align', source, result);
@@ -115,8 +117,10 @@ export default defineComponent<AlignProps, AlignRawBindings>({
     forceAlignPropsRef.value.target = props.target;
     forceAlignPropsRef.value.onAlign = onAlign;
 
+    const disabledRef = toRef(props, 'disabled');
+
     watch(
-      [toRef(props, 'disabled'), toRef(props, 'target')] as const,
+      [disabledRef, toRef(props, 'target')] as const,
       ([disabled, target]) => {
         forceAlignPropsRef.value.disabled = disabled;
         forceAlignPropsRef.value.target = target;
@@ -164,37 +168,40 @@ export default defineComponent<AlignProps, AlignRawBindings>({
     // Listen for source updated
     const sourceResizeMonitor = ref<MonitorRef>({ cancel: () => {} });
 
-    onMounted(() => {
-      const element = getElement(props.target);
-      const point = getPoint(props.target);
+    watchEffect(
+      () => {
+        const element = getElement(props.target);
+        const point = getPoint(props.target);
 
-      if (nodeRef.value !== sourceResizeMonitor.value.element) {
-        sourceResizeMonitor.value.cancel();
-        sourceResizeMonitor.value.element = nodeRef.value;
-        sourceResizeMonitor.value.cancel = monitorResize(
-          nodeRef.value,
-          forceAlign
-        );
-      }
-
-      if (
-        cacheRef.value.element !== element ||
-        !isSamePoint(cacheRef.value.point, point)
-      ) {
-        forceAlign();
-
-        // Add resize observer
-        if (resizeMonitor.value.element !== element) {
-          resizeMonitor.value.cancel();
-          resizeMonitor.value.element = element;
-          resizeMonitor.value.cancel = monitorResize(element, forceAlign);
+        if (nodeRef.value !== sourceResizeMonitor.value.element) {
+          sourceResizeMonitor.value.cancel();
+          sourceResizeMonitor.value.element = nodeRef.value;
+          sourceResizeMonitor.value.cancel = monitorResize(
+            nodeRef.value,
+            forceAlign
+          );
         }
-      }
-    });
+
+        if (
+          cacheRef.value.element !== element ||
+          !isSamePoint(cacheRef.value.point, point)
+        ) {
+          forceAlign();
+
+          // Add resize observer
+          if (resizeMonitor.value.element !== element) {
+            resizeMonitor.value.cancel();
+            resizeMonitor.value.element = element;
+            resizeMonitor.value.cancel = monitorResize(element, forceAlign);
+          }
+        }
+      },
+      { flush: 'post' }
+    );
 
     // Listen for disabled change
-    watchEffect(() => {
-      if (!props.disabled) {
+    watch(disabledRef, (disabled) => {
+      if (!disabled) {
         forceAlign();
       } else {
         cancelForceAlign();

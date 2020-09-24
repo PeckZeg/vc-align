@@ -43,6 +43,7 @@
         :monitor-window-resize="state.monitor"
         :align="state.align"
         :disabled="state.disabled"
+        @align="onAlign"
       >
         <div
           :style="{
@@ -130,6 +131,11 @@ export default {
 
     toggleSourceSize() {
       this.state.sourceWidth = this.state.sourceWidth + 10;
+    },
+
+    onAlign(...args) {
+      // eslint-disable-next-line no-console
+      console.log('onAlign', ...args);
     }
   }
 };
